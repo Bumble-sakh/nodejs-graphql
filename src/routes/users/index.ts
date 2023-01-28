@@ -17,10 +17,9 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
     },
     async function (request, reply): Promise<UserEntity> {
       const userId = request.params.id;
-
       const user = await fastify.db.users.findOne({ key: 'id', equals: userId });
 
-      if (user !== null) {
+      if (user) {
         return user;
       } else {
         throw reply.code(404);
