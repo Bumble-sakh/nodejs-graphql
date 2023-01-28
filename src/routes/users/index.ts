@@ -64,7 +64,18 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
             await fastify.db.users.change(targetUser.id, { subscribedToUserIds });
           }
         }
-        //TODO: delete posts, profile
+
+        const post = await fastify.db.posts.findOne({ key: 'userId', equals: userId });
+
+        if (post) {
+          await fastify.db.posts.delete(post.id);
+        }
+
+        const profile = await fastify.db.profiles.findOne({ key: 'userId', equals: userId });
+
+        if (profile) {
+          await fastify.db.profiles.delete(profile.id);
+        }
 
         return await fastify.db.users.delete(userId);
       } else {
